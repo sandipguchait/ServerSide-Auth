@@ -7,6 +7,7 @@ const router = require('./router');
 
 const MONGOURL = "mongodb://sandipguchait:roshni77@ds147965.mlab.com:47965/server-auth"
 //DATABASE SETUP
+mongoose.set('useCreateIndex', true);
 mongoose.connect(MONGOURL,{useNewUrlParser: true})
     .then(()=> console.log("DB connected"))
     .catch(error => console.log(error));
