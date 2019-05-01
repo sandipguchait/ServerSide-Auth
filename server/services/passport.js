@@ -3,14 +3,40 @@ const User = require('../models/User');
 const config = require('../config');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
+const LocalStrategy = require('passport-local');
 
-//SETUP OPTIONS FOR JWT STRATEGY
+
+//CREATE LOCAL STRATEGY FOR LOGIN USER
+const localOptions = { usernameField: 'email'}
+const localLogin = new LocalStrategy( localOptions, ( email, password, done ) => {
+    // Verify the email and password, call done with user
+    // if it is correct email and password
+    //otherwise, call done with false
+    User.findOne({ email }, (err, user) => {
+        if(err) return done(err);
+        if(!user) return done(null, false);
+
+        //Compare Passwords
+        user.comparePassword( password, (err, isMatch) => {
+            if(err) return done(err);
+            if(!isMatch) return done(null, false);
+
+            return done(null, user);
+        });
+    });
+});
+
+
+
+
+
+//CREATE JWT STRATEGY To CHECK AUTHORIZATION B4 VISITING A PARTICULAR ROUTE
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromHeader('authorization'),
     secretOrKey: config.secret
 };
 
-//CREATE JWT STRATEGY
+
 const jwtLogin = new JwtStrategy( jwtOptions, (payload, done) => {
     //See if user Id in thepayload is on our databse 
     // If it does call 'done' with that user
