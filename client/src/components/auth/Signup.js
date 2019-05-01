@@ -10,11 +10,11 @@ class SignUp extends Component {
         errors: [],
         loading: false
     };
-    
+
     //Redirect User on submit if fetch a token 
     componentWillReceiveProps(nextProps) {
         if(nextProps.token){
-            this.props.history.push('/')
+            this.props.history.push('/feature')
         }
     }
 
