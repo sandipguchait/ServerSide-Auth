@@ -11,7 +11,8 @@ import Welcome from './components/Welcome';
 import SignUp from './components/auth/Signup';
 import Feature from './components/Feature';
 import Reducer from './reducers/auth';
-
+import SignOut from './components/auth/SignOut';
+import SignIn from './components/auth/SignIn';
 
 
 const Root = () => (
@@ -21,11 +22,14 @@ const Root = () => (
         </App>
         <Route path="/signup" component={SignUp} />
         <Route path="/feature" component={Feature} />
+        <Route path="/signout" component={SignOut} />
+        <Route path="/signin" component={SignIn} />
     </BrowserRouter>
 )
 
 const store = createStore(
     Reducer, 
+    {auth: {authenticated: localStorage.getItem('token')}},
     composeWithDevTools(
         applyMiddleware(reduxThunk)
     )
