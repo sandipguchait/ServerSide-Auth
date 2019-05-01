@@ -10,6 +10,8 @@ export const signUp = ({ email, password }) => async dispatch => {
                 token: response.data.token
             }
         });
+        localStorage.setItem('token', response.data.token);
+
     } catch (err) {
         dispatch({
             type: AUTH_ERROR,
@@ -18,4 +20,36 @@ export const signUp = ({ email, password }) => async dispatch => {
             }
         })
     }
-}
+};
+
+export const signIn = ({ email, password }) => async dispatch => {
+    try{
+        const response = await axios.post('/signin', { email, password })
+        dispatch({
+            type: AUTH_USER,
+            payload: {
+                token: response.data.token
+            }
+        });
+        localStorage.setItem('token', response.data.token);
+
+    } catch (err) {
+        dispatch({
+            type: AUTH_ERROR,
+            payload: {
+                error: 'Inavalid Login Credentials'
+            }
+        })
+    }
+};
+
+export const signOut = () => {
+    localStorage.removeItem('token');
+
+    return {
+        type: AUTH_USER,
+        payload: {
+            token: ''
+        }
+    }
+};
